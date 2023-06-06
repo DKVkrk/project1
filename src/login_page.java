@@ -1,191 +1,107 @@
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.rmi.registry.Registry;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Scanner;
+public class login_page extends JFrame {
 
-// User class to represent a user
-class User {
-    private String username;
-    private String password;
+    private JTextField EmailField;
+    private JPasswordField passwordField;
 
-    public User(String username, String password) {
-        this.username = username;
-        this.password = password;
+    public login_page() {
+        // Set up the JFrame and panels
+        JFrame frame = new JFrame("Login Page");
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setTitle("Login Page");
+        setSize(300, 300);
+        JTextField textField = new JTextField();
+
+
+        JPanel loginPanel = new JPanel(new GridLayout(3, 4));
+        frame.setBackground(Color.CYAN);
+
+
+        JLabel usernameLabel = new JLabel("EmailID:");
+        JLabel passwordLabel = new JLabel("Password:");
+        EmailField = new JTextField();
+        passwordField = new JPasswordField();
+        JButton loginButton = new JButton("Login");
+        JButton signupButton = new JButton("Signup");
+        loginButton.setForeground(Color.PINK);
+        signupButton.setForeground(Color.PINK);
+        loginButton.setBackground(Color.WHITE);
+        signupButton.setBackground(Color.WHITE);
+
+
+        loginButton.addActionListener(new ButtonListener());
+        signupButton.addActionListener(new ButtonListener());
+
+        loginPanel.add(usernameLabel);
+        loginPanel.add(EmailField);
+        loginPanel.add(passwordLabel);
+        loginPanel.add(passwordField);
+        loginPanel.add(loginButton);
+        loginPanel.add(signupButton);
+
+        setContentPane(loginPanel);
     }
 
-    public String getUsername() {
-        return username;
-    }
+    private class ButtonListener implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            if (e.getSource() instanceof JButton) {
+                JButton clickedButton = (JButton) e.getSource();
+                if (clickedButton.getText().equals("Login")) {
+                    String username = EmailField.getText();
+                    String password = new String(passwordField.getPassword());
 
-    public String getPassword() {
-        return password;
-    }
-}
+                    // Establish a database connection
+                    try (Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/reservation", "root", "devesh@123")) {
+                        // Execute login query
+                        PreparedStatement statement = connection.prepareStatement("SELECT * FROM passenger_details WHERE e_mail = ? AND password = ?");
+                        statement.setString(1, username);
+                        statement.setString(2, password);
+                        ResultSet resultSet = statement.executeQuery();
 
-// AirlineReservationSystem class to handle the reservation system operations
-class AirlineReservationSystem {
-    private Map<String, User> users;
+                        if (resultSet.next()) {
+                            // Login successful, open the new UI page
+                            multiple_pageoption Page = new multiple_pageoption();
+                            Page.setVisible(true);
+                            // Close the login page
+                        } else {
+                            // Login failed, show an error message
+                            JOptionPane.showMessageDialog(login_page.this, "Invalid username or password.");
+                        }
+                        resultSet.close();
+                        statement.close();
+                        connection.close();
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                        // Show an error message
+                        JOptionPane.showMessageDialog(login_page.this, "Login failed. Please try again.");
+                    }
 
-    public  AirlineReservationSystem() {
-        users = new HashMap<>();
-    }
 
-    public void registerUser1(String username, String password) {
-        User user = new User(username, password);
-        users.put(username, user);
-        System.out.println("User registered successfully.");
-    }
+                } else if (clickedButton.getText().equals("Signup")) {
+                    register_page signupPage = new register_page();
+                    signupPage.setVisible(true);
+                    dispose(); // Close the login page
 
-    public boolean login(String username, String password) {
-        User user = users.get(username);
-        if (user != null && user.getPassword().equals(password)) {
-            System.out.println("Login successful.");
-            return true;
-        } else {
-            System.out.println("Invalid username or password.");
-            return false;
+                }
+            }
         }
     }
-}
 
-// Main class to run the program
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-public class login_page {
-    public static void main(String[]args) {
-        JFrame f=new JFrame("AIR JET");
-        f.getContentPane().setBackground(Color.CYAN);
-        final JLabel label = new JLabel();
-        label.setBounds(20,50, 200,40);
-       /* JPanel panel = new JPanel();
-        panel.setBackground(Color.BLUE);
-        f.add(panel);*/
-
-
-        final JPasswordField value = new JPasswordField();
-        value.setBounds(100,75,100,30);
-        JLabel l1=new JLabel("Username:");
-        l1.setBounds(20,20, 80,30);
-
-        JLabel l2=new JLabel("Password:");
-        l2.setBounds(20,75, 80,30);
-
-        final JTextField text = new JTextField();
-        text.setBounds(100,20, 80,30);
-        JButton b = new JButton("Login");
-        b.setBounds(100,220, 80,30);
-        b.setBackground(Color.black);
-        b.setForeground(Color.white);
-
-
-        JButton b45 = new JButton("SIGN UP");
-        b45.setBounds(60,280, 140,30);
-        b45.setBackground(Color.black);
-        b45.setForeground(Color.white);
-
-
-
-
-        JButton b1 = new JButton("Terms & conditions");
-        b1.setBounds(15,420, 200,30);
-        JLabel jlblogo = new JLabel();
-        jlblogo.setIcon(new ImageIcon("C:\\Users\\DEVESH\\OneDrive\\Desktop\\java project\\AGATAIR.jpg"));
-        jlblogo.setBounds(220,-80,6050,750);
-
-
-
-        f.add(value); f.add(l1); f.add(label); f.add(l2); f.add(b); f.add(text); f.add(b1);f.add(jlblogo);f.add(b45);
-        f.setSize(500,800);
-        f.setLayout(null);
-
-        f.setVisible(true);
-        b.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                String data = "Username" + " " + text.getText();
-                data = data + " ,Password:" + new String(value.getPassword());
-                f.dispose();
-                multiple_pageoption obj = new multiple_pageoption();
-                obj.main();
-
-
-
-
-            }
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(() -> {
+            login_page loginPage = new login_page();
+            loginPage.setVisible(true);
         });
-
-        b1.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                f.dispose();
-                t_co obj1 = new t_co();
-                String s = e.getActionCommand();
-                if (s.equals("Login")) {
-                    // create a dialog Box
-                    JDialog d = new JDialog(f, "AIR JET");
-
-                    // create a label
-                    JLabel l = new JLabel("Login Succesfull");
-
-                    d.add(l);
-
-                    // setsize of dialog
-                    d.setSize(100, 100);
-
-                    // set visibility of dialog
-                    d.setVisible(true);
-                }
-                Scanner sc = new Scanner(System.in);
-                AirlineReservationSystem obja = new AirlineReservationSystem();
-
-
-
-                // Register a user
-                System.out.print("Enter username: ");
-                String username = sc.nextLine();
-                System.out.print("Enter password: ");
-                String password = sc.nextLine();
-                obja.registerUser1(username, password);
-
-                // Login
-                System.out.print("Enter username: ");
-                username = sc.nextLine();
-                System.out.print("Enter password: ");
-                password = sc.nextLine();
-                obja.login(username, password);
-
-
-
-            }
-        });
-        b45.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                f.dispose();
-                register_page obj245 = new register_page();
-                obj245.main();
-            }
-        });
-
-
-
-
-
 
     }
 }

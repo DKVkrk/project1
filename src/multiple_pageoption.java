@@ -1,125 +1,88 @@
 import javax.swing.*;
-
 import java.awt.*;
-import java.awt.event.*;
-import java.awt.event.WindowEvent;
-import java.awt.event.WindowListener;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
+public class multiple_pageoption extends JFrame implements ActionListener {
+     JButton BookingButton;
+    private JButton bookingStatusButton;
+    private JButton refundStatusButton;
+    private JButton refundPolicyButton;
 
+    public multiple_pageoption() {
+        setTitle("Air Booking");
+        setSize(400, 300);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setLocationRelativeTo(null);
 
+        // Create buttons
+        BookingButton = new JButton("Booking");
+        bookingStatusButton = new JButton("Booking Status");
+        refundStatusButton = new JButton("Refund Status");
+        refundPolicyButton = new JButton("Refund Policy");
 
+        // Add action listeners
+        BookingButton.addActionListener(this);
+        bookingStatusButton.addActionListener(this);
+        refundStatusButton.addActionListener(this);
+        refundPolicyButton.addActionListener(this);
 
-public class multiple_pageoption {
-    public void main() {
-        JFrame f=new JFrame("AIR JET");
-        f.getContentPane().setBackground(Color.blue);
-        final JLabel label = new JLabel();
-        label.setBounds(20,150, 200,50);
-        JButton b1 = new JButton("Air Booking");
-        b1.setBounds(20,18,150,120);
-        b1.setBackground(Color.black);
-        b1.setForeground(Color.white);
+        // Create a panel and add buttons to it
+        JPanel panel = new JPanel(new GridLayout(4, 1));
+        panel.add(BookingButton);
+        panel.add(bookingStatusButton);
+        panel.add(refundStatusButton);
+        panel.add(refundPolicyButton);
 
-        JButton b2 = new JButton("Booking Status");
-        b2.setBounds(20,180,150,120);
-        b2.setBackground(Color.black);
-        b2.setForeground(Color.white);
-        JButton b3 = new JButton("Refund Status");
-        b3.setBounds(200,18,150,120);
-        b3.setBackground(Color.black);
-        b3.setForeground(Color.white);
-        JButton b4 = new JButton("Refund Policy");
-        b4.setBounds(200,180,150,120);
-        b4.setBackground(Color.black);
-        b4.setForeground(Color.white);
-        JButton b5 = new JButton("Refund Policy");
-        b5.setBounds(20,80,50,20);
-        b5.setBackground(Color.black);
-        b5.setForeground(Color.white);
+        // Add panel to the frame
+        add(panel);
 
-        JButton b88 = new JButton("Logout");
-        b88.setBounds(5,400, 100,30);
-        b88.setBackground(Color.black);
-        b88.setForeground(Color.white);
+        setVisible(true);
+    }
 
-        f.add(b1); f.add(b2); f.add(b3); f.add(b4);f.add(b5);f.add(b88);
-        f.setSize(500,500);
-        f.setLayout(null);
-        f.setVisible(true);
-
-        b1.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                f.dispose();
-                air_booking obj1 = new air_booking();
-                obj1.main();
-
-
-
-
-
-
-            }
-
-
-        });
-
-        b2.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                f.dispose();
-                booking_status obj2 = new booking_status();
-                obj2.main();
-
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(new Runnable() {
+            public void run() {
+                new multiple_pageoption();
             }
         });
-        b4.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                f.dispose();
-                refund_policy obj3 = new refund_policy();
-                obj3.main();
-            }
-        });
-        b3.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                f.dispose();
-                refund_ststus obj4 = new refund_ststus();
-                obj4.main();
+    }
+
+    public void actionPerformed(ActionEvent e) {
+        JButton source = (JButton) e.getSource();
 
 
-
-            }
-        });
-        b88.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                f.dispose();
-
-            }
-        });
+        if (e.getSource() == BookingButton) {
+            // Perform action for air booking button
+            // Show the next UI page for air booking
+            air_booking airBooking = new air_booking();
+            //dispose();
+            new air_booking();
 
 
 
 
-        f.add(b1);
-        f.add(b2);
-        f.add(b3);
-        f.add(b4);
-        f.add(b5);
-        f.add(b88);
-
-
-//        f.dispose();
-
-
-
-
-
-
-
-
-
+             // Close the current UI page
+        } else if (e.getSource() == bookingStatusButton) {
+            // Perform action for booking status button
+            // Show the next UI page for booking status
+            booking_status bookingStatusPage = new booking_status();
+            bookingStatusPage.setVisible(true);
+            dispose(); // Close the current UI page
+        } else if (e.getSource() == refundStatusButton) {
+            // Perform action for refund status button
+            // Show the next UI page for refund status
+            refund_ststus refundStatusPage = new refund_ststus();
+            refundStatusPage.setVisible(true);
+             // Close the current UI page
+        } else if (e.getSource() == refundPolicyButton) {
+            // Perform action for refund policy button
+            // Show the next UI page for refund policy
+            refund_policy refundPolicyPage = new refund_policy();
+            refundPolicyPage.setVisible(true);
+            dispose(); // Close the current UI page
+        }
     }
 }
+
+

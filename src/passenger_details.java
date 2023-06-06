@@ -1,90 +1,130 @@
+/*import java.awt.*;
+import java.awt.event.*;
+import java.sql.*;
 import javax.swing.*;
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 
-public class passenger_details {
-    public void main(){
-        JFrame f = new JFrame("PASSENGER DETAILS");
-        f.getContentPane().setBackground(Color.pink);
-        final JLabel label = new JLabel();
-        label.setBounds(20, 150, 200, 150);
-        JLabel l1 = new JLabel("Name:");
-        l1.setBounds(20, 20, 80, 30);
-        final JTextField text1 = new JTextField();
-        text1.setBounds(60, 25, 80, 30);
-        JLabel l2 = new JLabel("Age:");
+public class passenger_details extends JFrame {
 
-        l2.setBounds(20, 70, 80, 30);
-        final JTextField text2 = new JTextField();
-        text2.setBounds(60, 80, 80, 30);
-        JLabel l3 = new JLabel("Gender:");
-        l3.setBounds(20, 120, 80, 30);
-        final JTextField text3 = new JTextField();
-        text3.setBounds(70, 125, 80, 30);
-        JLabel l4 = new JLabel("Email.Id:");
-        l4.setBounds(20, 190, 80, 30);
-        final JTextField text4 = new JTextField();
-        text4.setBounds(70, 190, 80, 30);
+    private JLabel nameLabel, ageLabel, genderLabel, emailLabel;
+    private JTextField nameTextField, ageTextField, genderTextField, emailTextField;
+    private JButton payNowButton, previousButton,EnterButton;
+    private Connection connection;
+    private Statement statement;
+    private ResultSet resultSet;
 
+    public passenger_details() {
+        super("Passenger Details");
 
+        // Create labels
+        nameLabel = new JLabel("Name");
+        ageLabel = new JLabel("Age");
+        genderLabel = new JLabel("Gender");
+        emailLabel = new JLabel("Email");
 
-        JButton b = new JButton("Enter");
-        b.setBounds(180, 320, 80, 30);
-        JButton b9 = new JButton("Previous");
-        b9.setBounds(20, 320, 100, 30);
-        b9.setBackground(Color.black);
-        b9.setForeground(Color.white);
-        JButton b88 = new JButton("Logout");
-        b88.setBounds(348,320, 100,30);
-        b88.setBackground(Color.black);
-        b88.setForeground(Color.white);
+        // Create textfields
+        nameTextField = new JTextField(5);
+        ageTextField = new JTextField(10);
+        genderTextField = new JTextField(10);
+        emailTextField = new JTextField(5);
 
+        // Create buttons
+        EnterButton = new JButton("Enter");
+        previousButton = new JButton("Previous");
+        payNowButton = new JButton("Pay Now");
 
-
-        f.add(l1);
-        f.add(l2);
-        f.add(l3);
-        f.add(l4);
-
-        f.add(b);
-        f.add(text1);
-        f.add(text2);
-        f.add(text3);
-        f.add(text4);
-
-        f.add(b9);
-        f.add(b88);
-
-        f.setSize(500, 600);
-        f.setLayout(null);
-        f.setVisible(true);
-        b88.addActionListener(new ActionListener() {
+        // Add listeners to buttons
+        EnterButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                f.dispose();
+                // Get passenger details
+                String name = nameTextField.getText();
+                int age = Integer.parseInt(ageTextField.getText());
+                String gender = genderTextField.getText();
+                String email = emailTextField.getText();
+
+                // Connect to database
+                try {
+                    connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/reservation", "root", "devesh@123");
+                    statement = connection.createStatement();
+
+                    // Get flight number
+                    String flightNumber = JOptionPane.showInputDialog("Enter flight number:");
+
+                    // Get price of flight
+                   // resultSet = statement.executeQuery("SELECT price FROM flight WHERE flight_number = '" + flightNumber + "'");
+                    String q2 = "Select price from flight where flight_no="+flightNumber;
+                    Statement stm = connection.createStatement();
+                    ResultSet set1 = stm.executeQuery(q2);
+                    if (set1.next()) {
+                        int price = set1.getInt("price");
+
+                        // Display price
+                        JOptionPane.showMessageDialog(null, "The price of the flight is RS"+ price);
+                    } else {
+                        JOptionPane.showMessageDialog(null, "The flight number is not valid.");
+                    }
+
+                    // Close connection
+                    connection.close();
+                } catch (SQLException ex) {
+                    ex.printStackTrace();
+                }
+
 
             }
         });
-        b.addActionListener(new ActionListener() {
+
+        previousButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                f.dispose();
-                payment obj889 = new payment();
-                obj889.main();
+                air_booking no = new air_booking();
+                no.setVisible(true);
+                passenger_details no1 = new passenger_details();
+                no1.setVisible(false);
 
             }
         });
-        b9.addActionListener(new ActionListener() {
+        payNowButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                f.dispose();
-                air_booking obj108 = new air_booking();
-                obj108.main();
+                new payment();
+
             }
         });
 
+        // Add components to the frame
+        getContentPane().setLayout(new GridLayout(9, 3));
+        getContentPane().add(nameLabel);
+        getContentPane().add(nameTextField);
+        getContentPane().add(ageLabel);
+        getContentPane().add(ageTextField);
+        getContentPane().add(genderLabel);
+        getContentPane().add(genderTextField);
+        getContentPane().add(emailLabel);
+        getContentPane().add(emailTextField);
+        getContentPane().add(payNowButton);
+        getContentPane().add(previousButton);
+        getContentPane().add(EnterButton);
 
+        // Set the frame's size and location
+        setSize(400, 300);
+        setLocationRelativeTo(null);
 
+        // Set the frame's visibility
+        setVisible(true);
     }
-}
+
+    public static void main(String[] args) {
+        // Create and display the frame
+        passenger_details frame = new passenger_details();
+    }
+}*/
+
+
+
+
+
