@@ -23,20 +23,23 @@ This project allows users to **book flights, manage passenger details, view book
 
 ---
 
-🛠️ Installation & Setup
+## 🛠️ Installation & Setup
 
 Clone the repository
 git clone https://github.com/your-username/airline-reservation-system.git
 cd airline-reservation-system
+
 Set up the database
 Install MySQL
 Import the sql file into your MySQL server
 mysql -u root -p < resources/airline.sql
+
 Configure JDBC
 Update database credentials in DBConnection.java:
 String url = "jdbc:mysql://localhost:3306/airline_db";
 String user = "root";
 String password = "yourpassword";
+
 Run the project
 Compile and run the main class:
 javac src/Main.java
@@ -44,7 +47,7 @@ java src/Main
 
 ---
 
-📊 Database Schema
+## 📊 Database Schema
 ✈️ Tables
 Users: Stores user login details
 Flights: Stores flight details (flight number, source, destination, seats, fare, etc.)
@@ -52,21 +55,21 @@ Bookings: Stores booking information (user ID, flight ID, seat, status)
 
 ---
 
-📦 Requirements
+## 📦 Requirements
 Java JDK 8+
 MySQL 5.7+
 JDBC Driver
 
 ---
 
-🙌 Acknowledgements
+## 🙌 Acknowledgements
 Java Swing – UI framework
 JDBC – Database connectivity
 MySQL – Database management
 
 ---
 
-🔮 Future Enhancements
+## 🔮 Future Enhancements
 🧾 Ticket generation as PDF
 💳 Online payment integration
 🌍 Real-time flight data API integration
